@@ -1,0 +1,1840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexusGuard - Advanced Minecraft Anti-Cheat Solution</title>
+    <meta name="description" content="NexusGuard - Enterprise-grade anti-cheat for Minecraft servers. Advanced packet analysis, behavioral detection, and real-time protection. Trusted by networks worldwide.">
+    <meta name="keywords" content="Minecraft anti-cheat, server protection, packet analysis, behavioral detection, anti-cheat plugin, Minecraft security, Vulcan alternative, GrimAC alternative">
+    <meta name="author" content="NexusGuard">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://nexusguard.dev">
+    
+    <!-- OpenGraph -->
+    <meta property="og:title" content="NexusGuard - Advanced Minecraft Anti-Cheat">
+    <meta property="og:description" content="Enterprise-grade anti-cheat for Minecraft servers with advanced packet analysis and behavioral detection.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://nexusguard.dev">
+    <meta property="og:image" content="https://nexusguard.dev/og-image.png">
+    <meta property="og:site_name" content="NexusGuard">
+    
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="NexusGuard - Advanced Minecraft Anti-Cheat">
+    <meta name="twitter:description" content="Enterprise-grade anti-cheat for Minecraft servers with advanced packet analysis and behavioral detection.">
+    <meta name="twitter:image" content="https://nexusguard.dev/og-image.png">
+    
+    <!-- JSON-LD Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "NexusGuard",
+        "description": "Advanced Minecraft anti-cheat solution with packet analysis and behavioral detection",
+        "applicationCategory": "SecurityApplication",
+        "operatingSystem": "Minecraft Server",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "author": {
+            "@type": "Organization",
+            "name": "NexusGuard"
+        }
+    }
+    </script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            primary: '#22C55E',
+                            secondary: '#4ADE80',
+                            accent: '#16A34A',
+                            glow: 'rgba(34, 197, 94, 0.5)',
+                        },
+                        dark: {
+                            bg: '#050505',
+                            surface: '#0A0A0A',
+                            card: '#111111',
+                            border: '#1A1A1A',
+                        },
+                        accent: {
+                            blue: '#3B82F6',
+                            purple: '#8B5CF6',
+                            cyan: '#06B6D4',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'gradient': 'gradient 15s ease infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'text-shine': 'text-shine 3s ease-in-out infinite',
+                        'slide-up': 'slideUp 0.6s ease-out',
+                        'fade-in': 'fadeIn 0.5s ease-out',
+                        'typing': 'typing 2s steps(40, end)',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        gradient: {
+                            '0%, 100%': { backgroundPosition: '0% 50%' },
+                            '50%': { backgroundPosition: '100% 50%' },
+                        },
+                        glow: {
+                            '0%': { boxShadow: '0 0 20px rgba(34, 197, 94, 0.3)' },
+                            '100%': { boxShadow: '0 0 40px rgba(34, 197, 94, 0.6)' },
+                        },
+                        'text-shine': {
+                            '0%, 100%': { backgroundPosition: '0% 50%' },
+                            '50%': { backgroundPosition: '100% 50%' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        typing: {
+                            '0%': { width: '0' },
+                            '100%': { width: '100%' },
+                        },
+                    },
+                },
+            },
+        }
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #050505;
+            color: #FFFFFF;
+            overflow-x: hidden;
+        }
+        
+        /* Grid Background */
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background-image: 
+                linear-gradient(rgba(34, 197, 94, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(34, 197, 94, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+        }
+        
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(ellipse at 20% 20%, rgba(34, 197, 94, 0.08) 0%, transparent 50%),
+                        radial-gradient(ellipse at 80% 80%, rgba(15, 23, 42, 0.4) 0%, transparent 50%),
+                        radial-gradient(ellipse at 50% 50%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
+                        linear-gradient(180deg, #050505 0%, #0F172A 50%, #050505 100%);
+            background-size: 100% 100%;
+        }
+        
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+        
+        .halo {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+            animation: pulse-slow 4s ease-in-out infinite;
+        }
+        
+        /* Glassmorphism */
+        .glass {
+            background: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(34, 197, 94, 0.15);
+        }
+        
+        .glass-card {
+            background: linear-gradient(135deg, rgba(17, 17, 17, 0.8) 0%, rgba(5, 5, 5, 0.6) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(34, 197, 94, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.05), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .glass-card:hover::before {
+            left: 100%;
+        }
+        
+        .glass-card:hover {
+            border-color: rgba(34, 197, 94, 0.3);
+            transform: translateY(-8px) rotateX(2deg);
+            box-shadow: 0 30px 60px rgba(34, 197, 94, 0.12),
+                        0 0 40px rgba(34, 197, 94, 0.08),
+                        inset 0 1px 0 rgba(34, 197, 94, 0.1);
+        }
+        
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(135deg, #22C55E 0%, #4ADE80 50%, #22C55E 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: text-shine 3s linear infinite;
+        }
+        
+        /* Button Styles */
+        .btn-primary {
+            background: linear-gradient(135deg, #22C55E 0%, #4ADE80 100%);
+            color: #050505;
+            font-weight: 600;
+            padding: 14px 40px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(34, 197, 94, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(34, 197, 94, 0.1);
+            color: #FFFFFF;
+            font-weight: 500;
+            padding: 14px 40px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(34, 197, 94, 0.2);
+            border-color: #22C55E;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(34, 197, 94, 0.2);
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #050505;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #22C55E, #4ADE80);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #4ADE80, #22C55E);
+        }
+        
+        /* Smooth Scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Counter Animation */
+        .counter {
+            font-variant-numeric: tabular-nums;
+        }
+        
+        /* Feature Icon */
+        .feature-icon {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(74, 222, 128, 0.1) 100%);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover .feature-icon {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.3) 0%, rgba(74, 222, 128, 0.2) 100%);
+            border-color: rgba(34, 197, 94, 0.5);
+            transform: scale(1.1);
+        }
+        
+        /* Section Divider */
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, rgba(34, 197, 94, 0.3) 50%, transparent 100%);
+        }
+        
+        /* Nav Link */
+        .nav-link {
+            color: rgba(255, 255, 255, 0.7);
+            transition: color 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-link:hover {
+            color: #22C55E;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #22C55E, #4ADE80);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        /* Badge */
+        .badge {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%);
+            border: 1px solid rgba(34, 197, 94, 0.25);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .badge:hover {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(34, 197, 94, 0.1) 100%);
+            border-color: rgba(34, 197, 94, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(34, 197, 94, 0.15);
+        }
+        
+        /* Trust Badge */
+        .trust-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(34, 197, 94, 0.08);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+        }
+        
+        .trust-badge:hover {
+            background: rgba(34, 197, 94, 0.15);
+            border-color: rgba(34, 197, 94, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .trust-badge i {
+            color: #22C55E;
+        }
+        
+        /* Security Terminal */
+        .terminal {
+            background: linear-gradient(180deg, rgba(5, 5, 5, 0.95) 0%, rgba(15, 23, 42, 0.9) 100%);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            border-radius: 16px;
+            padding: 32px;
+            font-family: 'JetBrains Mono', monospace;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .terminal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.5), transparent);
+        }
+        
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(34, 197, 94, 0.1);
+        }
+        
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .terminal-dot.red { background: #EF4444; }
+        .terminal-dot.yellow { background: #F59E0B; }
+        .terminal-dot.green { background: #22C55E; }
+        
+        .terminal-line {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            opacity: 0;
+            animation: terminalFadeIn 0.5s ease forwards;
+        }
+        
+        .terminal-line.success {
+            color: #22C55E;
+        }
+        
+        .terminal-line .prompt {
+            color: #22C55E;
+            font-weight: bold;
+        }
+        
+        @keyframes terminalFadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+        
+        /* Category Section */
+        .category-section {
+            margin-bottom: 40px;
+        }
+        
+        .category-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .category-title i {
+            color: #22C55E;
+        }
+        
+        /* Detection Card */
+        .detection-card {
+            background: linear-gradient(135deg, rgba(17, 17, 17, 0.6) 0%, rgba(5, 5, 5, 0.4) 100%);
+            border: 1px solid rgba(34, 197, 94, 0.1);
+            border-radius: 12px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .detection-card:hover {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(17, 17, 17, 0.6) 100%);
+            border-color: rgba(34, 197, 94, 0.4);
+            transform: translateX(8px);
+        }
+        
+        .detection-card i {
+            color: #22C55E;
+            flex-shrink: 0;
+        }
+        
+        /* Network Card */
+        .network-card {
+            background: linear-gradient(135deg, rgba(17, 17, 17, 0.8) 0%, rgba(5, 5, 5, 0.6) 100%);
+            border: 1px solid rgba(34, 197, 94, 0.1);
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .network-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #22C55E, #4ADE80);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .network-card:hover::before {
+            opacity: 1;
+        }
+        
+        .network-card:hover {
+            border-color: rgba(34, 197, 94, 0.4);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(34, 197, 94, 0.1);
+        }
+        
+        .network-card i {
+            font-size: 48px;
+            color: #22C55E;
+            margin-bottom: 16px;
+        }
+        
+        /* Performance Metric */
+        .performance-metric {
+            background: linear-gradient(135deg, rgba(17, 17, 17, 0.6) 0%, rgba(5, 5, 5, 0.4) 100%);
+            border: 1px solid rgba(34, 197, 94, 0.1);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .performance-metric:hover {
+            border-color: rgba(34, 197, 94, 0.3);
+            transform: scale(1.02);
+        }
+        
+        .performance-metric .value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #22C55E;
+            margin-bottom: 8px;
+        }
+        
+        .performance-metric .label {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        /* Detection Badge */
+        .detection-badge {
+            background: rgba(34, 197, 94, 0.05);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            padding: 10px 20px;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .detection-badge:hover {
+            background: rgba(34, 197, 94, 0.15);
+            border-color: rgba(34, 197, 94, 0.4);
+            transform: scale(1.05);
+        }
+        
+        /* FAQ Accordion */
+        .faq-item {
+            border: 1px solid rgba(34, 197, 94, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .faq-item:hover {
+            border-color: rgba(34, 197, 94, 0.3);
+        }
+        
+        .faq-question {
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .faq-question:hover {
+            background: rgba(34, 197, 94, 0.05);
+        }
+        
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+        
+        .faq-item.active .faq-answer {
+            max-height: 200px;
+            padding: 0 20px 20px;
+        }
+        
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+        
+        /* Gallery Item */
+        .gallery-item {
+            background: linear-gradient(135deg, rgba(17, 17, 17, 0.6) 0%, rgba(5, 5, 5, 0.4) 100%);
+            border: 1px solid rgba(34, 197, 94, 0.1);
+            border-radius: 16px;
+            padding: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s ease;
+            min-height: 200px;
+        }
+        
+        .gallery-item:hover {
+            border-color: rgba(34, 197, 94, 0.3);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(34, 197, 94, 0.1);
+        }
+        
+        /* Logo Animation */
+        .logo-glow {
+            animation: glow 3s ease-in-out infinite;
+        }
+        
+        /* Hero Title Animation */
+        .hero-title {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease forwards;
+        }
+        
+        .hero-title:nth-child(1) { animation-delay: 0.2s; }
+        .hero-title:nth-child(2) { animation-delay: 0.4s; }
+        .hero-title:nth-child(3) { animation-delay: 0.6s; }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Custom Cursor */
+        .cursor-glow {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(34, 197, 94, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s ease;
+        }
+        
+        @media (max-width: 768px) {
+            .cursor-glow {
+                display: none;
+            }
+        }
+        
+        /* Dashboard Preview */
+        .dashboard-preview {
+            background: linear-gradient(180deg, rgba(5, 5, 5, 0.95) 0%, rgba(10, 10, 10, 0.9) 100%);
+            border: 1px solid rgba(34, 197, 94, 0.15);
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .dashboard-header {
+            background: rgba(34, 197, 94, 0.05);
+            border-bottom: 1px solid rgba(34, 197, 94, 0.1);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            padding: 24px;
+        }
+        
+        .dashboard-stat {
+            background: rgba(34, 197, 94, 0.05);
+            border: 1px solid rgba(34, 197, 94, 0.1);
+            border-radius: 8px;
+            padding: 16px;
+        }
+        
+        .dashboard-stat .value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #22C55E;
+        }
+        
+        .dashboard-stat .label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 4px;
+        }
+        
+        .dashboard-logs {
+            padding: 0 24px 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+        }
+        
+        .log-entry {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(34, 197, 94, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+        
+        .log-timestamp {
+            color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .log-type {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+        
+        .log-type.combat {
+            background: rgba(239, 68, 68, 0.2);
+            color: #EF4444;
+        }
+        
+        .log-type.movement {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3B82F6;
+        }
+        
+        .log-type.packet {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22C55E;
+        }
+        
+        .log-message {
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        /* Pricing Card */
+        .pricing-card {
+            background: linear-gradient(135deg, rgba(17, 17, 17, 0.8) 0%, rgba(5, 5, 5, 0.6) 100%);
+            border: 1px solid rgba(34, 197, 94, 0.1);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .pricing-card.featured {
+            border-color: rgba(34, 197, 94, 0.4);
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(5, 5, 5, 0.6) 100%);
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(34, 197, 94, 0.4);
+        }
+        
+        .pricing-card.featured::before {
+            content: 'Most Popular';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #22C55E, #4ADE80);
+            color: #050505;
+            padding: 4px 16px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .pricing-price {
+            font-size: 48px;
+            font-weight: 800;
+            color: #22C55E;
+            margin: 16px 0;
+        }
+        
+        .pricing-price span {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 400;
+        }
+        
+        .pricing-features {
+            list-style: none;
+            margin: 24px 0;
+        }
+        
+        .pricing-features li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .pricing-features li i {
+            color: #22C55E;
+        }
+        
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .comparison-table th,
+        .comparison-table td {
+            padding: 16px;
+            text-align: center;
+            border-bottom: 1px solid rgba(34, 197, 94, 0.1);
+        }
+        
+        .comparison-table th {
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .comparison-table td {
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .comparison-table .highlight {
+            background: rgba(34, 197, 94, 0.1);
+            border-radius: 8px;
+        }
+        
+        .comparison-table .check {
+            color: #22C55E;
+        }
+        
+        .comparison-table .cross {
+            color: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Mobile Menu */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            max-width: 400px;
+            height: 100%;
+            background: rgba(5, 5, 5, 0.98);
+            backdrop-filter: blur(20px);
+            z-index: 100;
+            transition: right 0.3s ease;
+            padding: 24px;
+            border-left: 1px solid rgba(34, 197, 94, 0.1);
+        }
+        
+        .mobile-menu.active {
+            right: 0;
+        }
+        
+        .mobile-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 99;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .mobile-menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor Glow -->
+    <div class="cursor-glow" id="cursorGlow"></div>
+    
+    <!-- Grid Background -->
+    <div class="grid-bg"></div>
+    
+    <!-- Animated Background -->
+    <div class="animated-bg" id="animatedBg"></div>
+    
+    <!-- Particles Container -->
+    <div id="particles"></div>
+    
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-primary to-brand-secondary flex items-center justify-center">
+                        <i data-lucide="shield-check" class="w-6 h-6 text-dark-bg"></i>
+                    </div>
+                    <span class="text-xl font-bold">NexusGuard</span>
+                </div>
+                
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="#dashboard" class="nav-link">Dashboard</a>
+                    <a href="#engine" class="nav-link">Engine</a>
+                    <a href="#checks" class="nav-link">Checks</a>
+                    <a href="#performance" class="nav-link">Performance</a>
+                    <a href="#pricing" class="nav-link">Pricing</a>
+                    <a href="#docs" class="nav-link">Docs</a>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <a href="#" class="btn-secondary text-sm hidden sm:flex">
+                        <i data-lucide="discord" class="w-4 h-4"></i>
+                        Discord
+                    </a>
+                    <a href="#" class="btn-primary text-sm">
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                        Download
+                    </a>
+                    <button id="mobileMenuBtn" class="md:hidden p-2">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+    
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="flex justify-between items-center mb-8">
+            <span class="text-xl font-bold">NexusGuard</span>
+            <button id="closeMobileMenu" class="p-2">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+        </div>
+        <div class="flex flex-col gap-4">
+            <a href="#dashboard" class="nav-link text-lg">Dashboard</a>
+            <a href="#engine" class="nav-link text-lg">Engine</a>
+            <a href="#checks" class="nav-link text-lg">Checks</a>
+            <a href="#performance" class="nav-link text-lg">Performance</a>
+            <a href="#pricing" class="nav-link text-lg">Pricing</a>
+            <a href="#docs" class="nav-link text-lg">Docs</a>
+            <a href="#" class="btn-secondary w-full justify-center mt-4">
+                <i data-lucide="discord" class="w-4 h-4"></i>
+                Discord
+            </a>
+        </div>
+    </div>
+    
+    <!-- Hero Section -->
+    <section class="min-h-screen flex items-center pt-20 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 py-20 grid lg:grid-cols-2 gap-12 items-center">
+            <!-- Left Content -->
+            <div class="order-2 lg:order-1">
+                <!-- Trust Badge -->
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-primary/10 border border-brand-primary/30 mb-6">
+                    <i data-lucide="shield-check" class="w-4 h-4 text-brand-primary"></i>
+                    <span class="text-sm text-brand-primary font-medium">Trusted by Minecraft Networks</span>
+                </div>
+                
+                <!-- Title -->
+                <h1 class="text-5xl md:text-7xl font-black mb-6 leading-tight">
+                    <span class="text-white">Enterprise-Grade</span>
+                    <br>
+                    <span class="gradient-text">Anti-Cheat</span>
+                    <br>
+                    <span class="text-white">Protection</span>
+                </h1>
+                
+                <!-- Subtitle -->
+                <p class="text-lg text-gray-400 mb-8 max-w-lg leading-relaxed">
+                    Advanced packet analysis, behavioral detection, and real-time protection for Minecraft servers. Built for networks, trusted by professionals.
+                </p>
+                
+                <!-- Trust Badges -->
+                <div class="flex flex-wrap gap-3 mb-8">
+                    <div class="trust-badge">
+                        <i data-lucide="gamepad-2" class="w-4 h-4"></i>
+                        <span>1.8 - 1.21.8</span>
+                    </div>
+                    <div class="trust-badge">
+                        <i data-lucide="check-circle" class="w-4 h-4"></i>
+                        <span>Paper Compatible</span>
+                    </div>
+                    <div class="trust-badge">
+                        <i data-lucide="zap" class="w-4 h-4"></i>
+                        <span>Zero TPS Impact</span>
+                    </div>
+                </div>
+                
+                <!-- Buttons -->
+                <div class="flex flex-wrap gap-4">
+                    <a href="#" class="btn-primary text-lg">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                        Download v3.0
+                    </a>
+                    <a href="#docs" class="btn-secondary text-lg">
+                        <i data-lucide="book-open" class="w-5 h-5"></i>
+                        Documentation
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Right Content - Dashboard Preview -->
+            <div class="order-1 lg:order-2">
+                <div class="dashboard-preview">
+                    <div class="dashboard-header">
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="shield-check" class="w-5 h-5 text-brand-primary"></i>
+                            <span class="font-semibold">NexusGuard Dashboard</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-brand-primary animate-pulse"></span>
+                            <span class="text-xs text-gray-400">Live</span>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-stats">
+                        <div class="dashboard-stat">
+                            <div class="value counter" data-target="1247">0</div>
+                            <div class="label">Players Scanned</div>
+                        </div>
+                        <div class="dashboard-stat">
+                            <div class="value counter" data-target="89432">0</div>
+                            <div class="label">Checks Executed</div>
+                        </div>
+                        <div class="dashboard-stat">
+                            <div class="value counter" data-target="156">0</div>
+                            <div class="label">Threats Blocked</div>
+                        </div>
+                        <div class="dashboard-stat">
+                            <div class="value">20.0</div>
+                            <div class="label">TPS Impact</div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-logs">
+                        <div class="log-entry">
+                            <span class="log-timestamp">14:32:45</span>
+                            <span class="log-type combat">COMBAT</span>
+                            <span class="log-message">KillAura detected for player xXSlayerXx</span>
+                        </div>
+                        <div class="log-entry">
+                            <span class="log-timestamp">14:32:42</span>
+                            <span class="log-type movement">MOVEMENT</span>
+                            <span class="log-message">Invalid motion cancelled for Player123</span>
+                        </div>
+                        <div class="log-entry">
+                            <span class="log-timestamp">14:32:38</span>
+                            <span class="log-type packet">PACKET</span>
+                            <span class="log-message">Exploit blocked: BadPacket sequence</span>
+                        </div>
+                        <div class="log-entry">
+                            <span class="log-timestamp">14:32:35</span>
+                            <span class="log-type combat">COMBAT</span>
+                            <span class="log-message">Reach violation detected (4.2m)</span>
+                        </div>
+                        <div class="log-entry">
+                            <span class="log-timestamp">14:32:31</span>
+                            <span class="log-type packet">PACKET</span>
+                            <span class="log-message">Packet analysis: Normal traffic</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <div class="section-divider"></div>
+    
+    <!-- Dashboard Preview Section -->
+    <section id="dashboard" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                    <span class="gradient-text">Dashboard</span> Preview
+                </h2>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+                    Real-time monitoring and analysis interface
+                </p>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-8">
+                <!-- Player Analysis -->
+                <div class="glass-card p-8 rounded-2xl">
+                    <h3 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                        <i data-lucide="user" class="w-6 h-6 text-brand-primary"></i>
+                        Player Analysis
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center p-4 bg-dark-card/50 rounded-lg">
+                            <div>
+                                <div class="font-semibold">xXSlayerXx</div>
+                                <div class="text-sm text-gray-400">UUID: 550e8400-e29b...</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-brand-primary font-bold">High Risk</div>
+                                <div class="text-sm text-gray-400">Confidence: 94%</div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center p-4 bg-dark-card/50 rounded-lg">
+                            <div>
+                                <div class="font-semibold">Player123</div>
+                                <div class="text-sm text-gray-400">UUID: 6ba7b810-9dad...</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-accent-blue font-bold">Medium Risk</div>
+                                <div class="text-sm text-gray-400">Confidence: 67%</div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center p-4 bg-dark-card/50 rounded-lg">
+                            <div>
+                                <div class="font-semibold">ProGamer2024</div>
+                                <div class="text-sm text-gray-400">UUID: 1b9d6bcd-bbfd...</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-brand-secondary font-bold">Low Risk</div>
+                                <div class="text-sm text-gray-400">Confidence: 23%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Violations -->
+                <div class="glass-card p-8 rounded-2xl">
+                    <h3 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                        <i data-lucide="alert-triangle" class="w-6 h-6 text-brand-primary"></i>
+                        Recent Violations
+                    </h3>
+                    <div class="space-y-3 font-mono text-sm">
+                        <div class="p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
+                            <div class="flex justify-between mb-1">
+                                <span class="text-red-400">[COMBAT] KillAura</span>
+                                <span class="text-gray-400">14:32:45</span>
+                            </div>
+                            <div class="text-gray-400">Player: xXSlayerXx | VL: 5/5</div>
+                        </div>
+                        <div class="p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+                            <div class="flex justify-between mb-1">
+                                <span class="text-blue-400">[MOVEMENT] Speed</span>
+                                <span class="text-gray-400">14:32:42</span>
+                            </div>
+                            <div class="text-gray-400">Player: Player123 | VL: 3/5</div>
+                        </div>
+                        <div class="p-3 bg-brand-primary/10 border border-brand-primary/20 rounded-lg">
+                            <div class="flex justify-between mb-1">
+                                <span class="text-brand-primary">[PACKET] BadPacket</span>
+                                <span class="text-gray-400">14:32:38</span>
+                            </div>
+                            <div class="text-gray-400">Player: Unknown | VL: 1/5</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <div class="section-divider"></div>
+    
+    <!-- Detection Engine Section -->
+    <section id="engine" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                    Detection <span class="gradient-text">Engine</span>
+                </h2>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+                    Advanced detection methodologies powered by modern technology
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="glass-card p-8 rounded-2xl">
+                    <div class="feature-icon mb-6">
+                        <i data-lucide="package" class="w-10 h-10 text-brand-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Packet Analysis</h3>
+                    <p class="text-gray-400 text-sm">Deep packet inspection with custom protocol analysis for exploit detection</p>
+                </div>
+                
+                <div class="glass-card p-8 rounded-2xl">
+                    <div class="feature-icon mb-6">
+                        <i data-lucide="brain" class="w-10 h-10 text-brand-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">ML Behavioral Detection</h3>
+                    <p class="text-gray-400 text-sm">Machine learning algorithms for pattern recognition and anomaly detection</p>
+                </div>
+                
+                <div class="glass-card p-8 rounded-2xl">
+                    <div class="feature-icon mb-6">
+                        <i data-lucide="rotate-3d" class="w-10 h-10 text-brand-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Rotation Analysis</h3>
+                    <p class="text-gray-400 text-sm">Advanced rotation tracking with pitch, yaw, and delta analysis</p>
+                </div>
+                
+                <div class="glass-card p-8 rounded-2xl">
+                    <div class="feature-icon mb-6">
+                        <i data-lucide="footprints" class="w-10 h-10 text-brand-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Movement Simulation</h3>
+                    <p class="text-gray-400 text-sm">Physics-based movement prediction for accurate cheat detection</p>
+                </div>
+                
+                <div class="glass-card p-8 rounded-2xl">
+                    <div class="feature-icon mb-6">
+                        <i data-lucide="crosshair" class="w-10 h-10 text-brand-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Combat Prediction</h3>
+                    <p class="text-gray-400 text-sm">Predictive combat analysis for aim assist and autoclicker detection</p>
+                </div>
+                
+                <div class="glass-card p-8 rounded-2xl">
+                    <div class="feature-icon mb-6">
+                        <i data-lucide="database" class="w-10 h-10 text-brand-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Transaction Analysis</h3>
+                    <p class="text-gray-400 text-sm">Real-time transaction monitoring for inventory and economy exploits</p>
+                </div>
+                
+                <div class="glass-card p-8 rounded-2xl">
+                    <div class="feature-icon mb-6">
+                        <i data-lucide="shield-alert" class="w-10 h-10 text-brand-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Exploit Prevention</h3>
+                    <p class="text-gray-400 text-sm">Proactive exploit blocking with known vulnerability database</p>
+                </div>
+                
+                <div class="glass-card p-8 rounded-2xl">
+                    <div class="feature-icon mb-6">
+                        <i data-lucide="zap" class="w-10 h-10 text-brand-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Async Processing</h3>
+                    <p class="text-gray-400 text-sm">Multi-threaded architecture for zero TPS impact</p>
+                </div>
+                
+                <div class="glass-card p-8 rounded-2xl">
+                    <div class="feature-icon mb-6">
+                        <i data-lucide="cpu" class="w-10 h-10 text-brand-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Memory Efficient</h3>
+                    <p class="text-gray-400 text-sm">Optimized memory usage with object pooling and caching</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <div class="section-divider"></div>
+    
+    <!-- Checks Section -->
+    <section id="checks" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                    Detection <span class="gradient-text">Checks</span>
+                </h2>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+                    Comprehensive check coverage for all cheat categories
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Combat Checks -->
+                <div>
+                    <div class="category-title">
+                        <i data-lucide="swords"></i>
+                        Combat
+                    </div>
+                    <div class="space-y-2">
+                        <div class="detection-card"><i data-lucide="check" class="w-4 h-4"></i><span>KillAura</span></div>
+                        <div class="detection-card"><i data-lucide="check" class="w-4 h-4"></i><span>Reach</span></div>
+                        <div class="detection-card"><i data-lucide="check" class="w-4 h-4"></i><span>AutoClicker</span></div>
+                        <div class="detection-card"><i data-lucide="check" class="w-4 h-4"></i><span>AimAssist</span></div>
+                        <div class="detection-card"><i data-lucide="check" class="w-4 h-4"></i><span>Velocity</span></div>
+                        <div class="detection-card"><i data-lucide="check" class="w-4 h-4"></i><span>Criticals</span></div>
+                        <div class="detection-card"><i data-lucide="check" class="w-4 h-4"></i><span>HitBox</span></div>
+                        <div class="detection-card"><i data-lucide="check" class="w-4 h-4"></i><span>BadPackets</span></div>
+                    </div>
+                </div>
+                
+                <!-- Movement Checks -->
+                <div>
+                    <div class="category-title">
+                        <i data-lucide="footprints"></i>
+                        Movement
+                    </div>
+                    <div class="space-y-2">
+                        <div class="detection-card"><i data-lucide="check" class="w-4 h-4"></i><span>Fly</span></div>
+                        <div class="detection-card"><i data-lucide="check" class="w-4 h-4"></i><span>Speed</span></div>
+                        <div class="detection-card"><i data-lucide="check" class="w-4 h-4"></i><span>BunnyHop</span></div>
+                        <div class="detection-card"><i data-lucide="check" class="w-4 h-4"></i><span>Jesus</span></div>
+                        <div class="detection-card"><i data-lucide="check" class="w-4 h-4"></i><span>NoFall</span></div>
+                        <div class="detection-card"><i data-lucide="check" class="w-4 h-4"></i><span>Timer</span></div>
+                        <div class="detection-card"><i data-lucide="check" class="w-4 h-4"></i><span>Scaffold</span></div>
+                        <div class="detection-card"><i data-lucide="check" class="w-4 h-4"></i><span>Step</span></div>
+                    </div>
+                </div>
+                
+                <!-- Exploit Checks -->
+                <div>
+                    <div class="category-title">
+                        <i data-lucide="shield-alert"></i>
+                        Exploit
+                    </div>
+                    <div class="space-y-2">
+                        <div class="detection-card"><i data-lucide="check" class="w-4 h-4"></i><span>Crash Exploits</span></div>
+                        <div class="detection-card"><i data-lucide="check" class="w-4 h-4"></i><span>Packet Exploits</span></div>
+                        <div class="detection-card"><i data-lucide="check" class="w-4 h-4"></i><span>Inventory Exploits</span></div>
+                        <div class="detection-card"><i data-lucide="check" class="w-4 h-4"></i><span>Plugin Abuse</span></div>
+                        <div class="detection-card"><i data-lucide="check" class="w-4 h-4"></i><span>Protocol Exploits</span></div>
+                        <div class="detection-card"><i data-lucide="check" class="w-4 h-4"></i><span>NBT Exploits</span></div>
+                        <div class="detection-card"><i data-lucide="check" class="w-4 h-4"></i><span>Chunk Exploits</span></div>
+                        <div class="detection-card"><i data-lucide="check" class="w-4 h-4"></i><span>Command Exploits</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <div class="section-divider"></div>
+    
+    <!-- Statistics Section -->
+    <section id="stats" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                    <span class="gradient-text">Statistics</span>
+                </h2>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+                    Real-world performance metrics
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 lg:grid-cols-5 gap-6">
+                <div class="glass-card p-8 rounded-2xl text-center">
+                    <div class="text-4xl md:text-5xl font-bold gradient-text mb-2 counter" data-target="50">0</div>
+                    <div class="text-sm text-gray-400">Detection Checks</div>
+                </div>
+                
+                <div class="glass-card p-8 rounded-2xl text-center">
+                    <div class="text-4xl md:text-5xl font-bold gradient-text mb-2">1.8-1.21.8</div>
+                    <div class="text-sm text-gray-400">Version Support</div>
+                </div>
+                
+                <div class="glass-card p-8 rounded-2xl text-center">
+                    <div class="text-4xl md:text-5xl font-bold gradient-text mb-2">&lt;1ms</div>
+                    <div class="text-sm text-gray-400">Avg Processing</div>
+                </div>
+                
+                <div class="glass-card p-8 rounded-2xl text-center">
+                    <div class="text-4xl md:text-5xl font-bold gradient-text mb-2 counter" data-target="99">0</div>
+                    <div class="text-sm text-gray-400">% Packet Coverage</div>
+                </div>
+                
+                <div class="glass-card p-8 rounded-2xl text-center">
+                    <div class="text-4xl md:text-5xl font-bold gradient-text mb-2">24/7</div>
+                    <div class="text-sm text-gray-400">Monitoring</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <div class="section-divider"></div>
+    
+    <!-- Performance Section -->
+    <section id="performance" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                    <span class="gradient-text">Performance</span> Architecture
+                </h2>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+                    Built for efficiency without compromising security
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8 mb-12">
+                <div class="glass-card p-8 rounded-2xl">
+                    <h3 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                        <i data-lucide="cpu" class="w-6 h-6 text-brand-primary"></i>
+                        CPU Impact
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Async Processing</span>
+                            <span class="text-brand-primary font-semibold">Enabled</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Multi-threaded Engine</span>
+                            <span class="text-brand-primary font-semibold">4 Threads</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Average CPU Usage</span>
+                            <span class="text-brand-primary font-semibold">&lt;2%</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Peak CPU Usage</span>
+                            <span class="text-brand-primary font-semibold">&lt;5%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="glass-card p-8 rounded-2xl">
+                    <h3 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                        <i data-lucide="activity" class="w-6 h-6 text-brand-primary"></i>
+                        TPS Impact
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Packet Pipeline</span>
+                            <span class="text-brand-primary font-semibold">Optimized</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Memory Efficient</span>
+                            <span class="text-brand-primary font-semibold">Object Pooling</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">No TPS Drops</span>
+                            <span class="text-brand-primary font-semibold">Guaranteed</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Tick Rate</span>
+                            <span class="text-brand-primary font-semibold">20.0 TPS</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Performance Graph Placeholder -->
+            <div class="glass-card p-8 rounded-2xl">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-semibold">Resource Usage Over Time</h3>
+                    <div class="flex gap-4 text-sm">
+                        <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-brand-primary"></span> CPU</span>
+                        <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-accent-blue"></span> Memory</span>
+                        <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-accent-purple"></span> TPS</span>
+                    </div>
+                </div>
+                <div class="h-48 bg-dark-card/50 rounded-lg flex items-center justify-center border border-dark-border">
+                    <div class="text-gray-400">
+                        <i data-lucide="bar-chart-2" class="w-12 h-12 mx-auto mb-2 opacity-50"></i>
+                        <p>Real-time performance graph</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <div class="section-divider"></div>
+    
+    <!-- Comparison Section -->
+    <section id="comparison" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                    Why Choose <span class="gradient-text">NexusGuard</span>
+                </h2>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+                    Compare with other anti-cheat solutions
+                </p>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Generic AntiCheat</th>
+                            <th>Basic Plugins</th>
+                            <th class="highlight">NexusGuard</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Detection Accuracy</td>
+                            <td>60%</td>
+                            <td>75%</td>
+                            <td class="highlight">95%</td>
+                        </tr>
+                        <tr>
+                            <td>False Positives</td>
+                            <td>High</td>
+                            <td>Medium</td>
+                            <td class="highlight">Low</td>
+                        </tr>
+                        <tr>
+                            <td>Update Frequency</td>
+                            <td>Slow</td>
+                            <td>Medium</td>
+                            <td class="highlight">Fast</td>
+                        </tr>
+                        <tr>
+                            <td>API Access</td>
+                            <td><i data-lucide="x" class="cross"></i></td>
+                            <td><i data-lucide="x" class="cross"></i></td>
+                            <td class="highlight"><i data-lucide="check" class="check"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Packet Analysis</td>
+                            <td><i data-lucide="x" class="cross"></i></td>
+                            <td><i data-lucide="x" class="cross"></i></td>
+                            <td class="highlight"><i data-lucide="check" class="check"></i></td>
+                        </tr>
+                        <tr>
+                            <td>ML Detection</td>
+                            <td><i data-lucide="x" class="cross"></i></td>
+                            <td><i data-lucide="x" class="cross"></i></td>
+                            <td class="highlight"><i data-lucide="check" class="check"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Performance Impact</td>
+                            <td>High</td>
+                            <td>Medium</td>
+                            <td class="highlight">Minimal</td>
+                        </tr>
+                        <tr>
+                            <td>Network Support</td>
+                            <td><i data-lucide="x" class="cross"></i></td>
+                            <td><i data-lucide="x" class="cross"></i></td>
+                            <td class="highlight"><i data-lucide="check" class="check"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+    
+    <div class="section-divider"></div>
+    
+    <!-- Documentation Section -->
+    <section id="docs" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                    <span class="gradient-text">Documentation</span>
+                </h2>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+                    Comprehensive guides and developer resources
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <a href="#" class="glass-card p-8 rounded-2xl group">
+                    <div class="feature-icon mb-6 group-hover:border-brand-primary/50 transition-colors">
+                        <i data-lucide="download" class="w-8 h-8 text-brand-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Installation</h3>
+                    <p class="text-gray-400 mb-4">Quick setup guide for all server types</p>
+                    <div class="flex items-center gap-2 text-brand-primary">
+                        <span class="text-sm">Get Started</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </div>
+                </a>
+                
+                <a href="#" class="glass-card p-8 rounded-2xl group">
+                    <div class="feature-icon mb-6 group-hover:border-brand-primary/50 transition-colors">
+                        <i data-lucide="settings" class="w-8 h-8 text-brand-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Configuration</h3>
+                    <p class="text-gray-400 mb-4">Customize every aspect of protection</p>
+                    <div class="flex items-center gap-2 text-brand-primary">
+                        <span class="text-sm">Configure</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </div>
+                </a>
+                
+                <a href="#" class="glass-card p-8 rounded-2xl group">
+                    <div class="feature-icon mb-6 group-hover:border-brand-primary/50 transition-colors">
+                        <i data-lucide="code" class="w-8 h-8 text-brand-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">API Reference</h3>
+                    <p class="text-gray-400 mb-4">REST API documentation for developers</p>
+                    <div class="flex items-center gap-2 text-brand-primary">
+                        <span class="text-sm">View API</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </div>
+                </a>
+                
+                <a href="#" class="glass-card p-8 rounded-2xl group">
+                    <div class="feature-icon mb-6 group-hover:border-brand-primary/50 transition-colors">
+                        <i data-lucide="terminal" class="w-8 h-8 text-brand-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Developer Resources</h3>
+                    <p class="text-gray-400 mb-4">SDKs, plugins, and integrations</p>
+                    <div class="flex items-center gap-2 text-brand-primary">
+                        <span class="text-sm">Explore</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <div class="section-divider"></div>
+    
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                    <span class="gradient-text">Pricing</span>
+                </h2>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+                    Choose the plan that fits your needs
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <!-- Free Plan -->
+                <div class="pricing-card">
+                    <h3 class="text-2xl font-bold mb-2">Free</h3>
+                    <p class="text-gray-400 mb-6">For small servers</p>
+                    <div class="pricing-price">$0<span>/mo</span></div>
+                    <ul class="pricing-features">
+                        <li><i data-lucide="check" class="w-5 h-5"></i>Basic combat checks</li>
+                        <li><i data-lucide="check" class="w-5 h-5"></i>Movement detection</li>
+                        <li><i data-lucide="check" class="w-5 h-5"></i>Packet analysis</li>
+                        <li><i data-lucide="check" class="w-5 h-5"></i>Community support</li>
+                        <li><i data-lucide="check" class="w-5 h-5"></i>Regular updates</li>
+                    </ul>
+                    <a href="#" class="btn-secondary w-full justify-center mt-6">Get Started</a>
+                </div>
+                
+                <!-- Premium Plan -->
+                <div class="pricing-card featured">
+                    <h3 class="text-2xl font-bold mb-2">Premium</h3>
+                    <p class="text-gray-400 mb-6">For growing networks</p>
+                    <div class="pricing-price">$15<span>/mo</span></div>
+                    <ul class="pricing-features">
+                        <li><i data-lucide="check" class="w-5 h-5"></i>All Free features</li>
+                        <li><i data-lucide="check" class="w-5 h-5"></i>Advanced ML detection</li>
+                        <li><i data-lucide="check" class="w-5 h-5"></i>Full API access</li>
+                        <li><i data-lucide="check" class="w-5 h-5"></i>Priority support</li>
+                        <li><i data-lucide="check" class="w-5 h-5"></i>Custom configurations</li>
+                        <li><i data-lucide="check" class="w-5 h-5"></i>Dashboard access</li>
+                    </ul>
+                    <a href="#" class="btn-primary w-full justify-center mt-6">Start Trial</a>
+                </div>
+                
+                <!-- Enterprise Plan -->
+                <div class="pricing-card">
+                    <h3 class="text-2xl font-bold mb-2">Enterprise</h3>
+                    <p class="text-gray-400 mb-6">For large networks</p>
+                    <div class="pricing-price">Custom</div>
+                    <ul class="pricing-features">
+                        <li><i data-lucide="check" class="w-5 h-5"></i>All Premium features</li>
+                        <li><i data-lucide="check" class="w-5 h-5"></i>Multi-server support</li>
+                        <li><i data-lucide="check" class="w-5 h-5"></i>Custom development</li>
+                        <li><i data-lucide="check" class="w-5 h-5"></i>Dedicated support</li>
+                        <li><i data-lucide="check" class="w-5 h-5"></i>SLA guarantee</li>
+                        <li><i data-lucide="check" class="w-5 h-5"></i>White-label options</li>
+                    </ul>
+                    <a href="#" class="btn-secondary w-full justify-center mt-6">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <div class="section-divider"></div>
+    
+    <!-- CTA Section -->
+    <section class="py-24 relative">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <div class="glass-card p-16 rounded-3xl">
+                <h2 class="text-4xl md:text-6xl font-bold mb-6">
+                    Ready to Secure Your Server?
+                </h2>
+                <p class="text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
+                    Join thousands of networks trusting NexusGuard for their protection
+                </p>
+                <div class="flex flex-wrap justify-center gap-6">
+                    <a href="#" class="btn-primary text-lg">
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                        Download v3.0
+                    </a>
+                    <a href="#" class="btn-secondary text-lg">
+                        <i data-lucide="users" class="w-5 h-5"></i>
+                        Join Discord
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="py-16 border-t border-dark-border">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-5 gap-12 mb-12">
+                <div class="md:col-span-2">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-primary to-brand-secondary flex items-center justify-center">
+                            <i data-lucide="shield-check" class="w-7 h-7 text-dark-bg"></i>
+                        </div>
+                        <span class="text-2xl font-bold">NexusGuard</span>
+                    </div>
+                    <p class="text-gray-400 mb-6">
+                        Enterprise-grade anti-cheat protection for Minecraft servers. Advanced packet analysis, behavioral detection, and real-time monitoring.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#" class="text-gray-400 hover:text-brand-primary transition-colors">
+                            <i data-lucide="github" class="w-6 h-6"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-brand-primary transition-colors">
+                            <i data-lucide="twitter" class="w-6 h-6"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-brand-primary transition-colors">
+                            <i data-lucide="discord" class="w-6 h-6"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Product</h4>
+                    <ul class="space-y-3 text-gray-400">
+                        <li><a href="#dashboard" class="hover:text-brand-primary transition-colors">Dashboard</a></li>
+                        <li><a href="#engine" class="hover:text-brand-primary transition-colors">Engine</a></li>
+                        <li><a href="#checks" class="hover:text-brand-primary transition-colors">Checks</a></li>
+                        <li><a href="#performance" class="hover:text-brand-primary transition-colors">Performance</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Resources</h4>
+                    <ul class="space-y-3 text-gray-400">
+                        <li><a href="#docs" class="hover:text-brand-primary transition-colors">Documentation</a></li>
+                        <li><a href="#pricing" class="hover:text-brand-primary transition-colors">Pricing</a></li>
+                        <li><a href="#" class="hover:text-brand-primary transition-colors">API Reference</a></li>
+                        <li><a href="#" class="hover:text-brand-primary transition-colors">Status Page</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Company</h4>
+                    <ul class="space-y-3 text-gray-400">
+                        <li><a href="#" class="hover:text-brand-primary transition-colors">About</a></li>
+                        <li><a href="#" class="hover:text-brand-primary transition-colors">Blog</a></li>
+                        <li><a href="#" class="hover:text-brand-primary transition-colors">Careers</a></li>
+                        <li><a href="#" class="hover:text-brand-primary transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Legal</h4>
+                    <ul class="space-y-3 text-gray-400">
+                        <li><a href="#" class="hover:text-brand-primary transition-colors">Terms of Service</a></li>
+                        <li><a href="#" class="hover:text-brand-primary transition-colors">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-brand-primary transition-colors">License</a></li>
+                        <li><a href="#" class="hover:text-brand-primary transition-colors">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="flex flex-col md:flex-row items-center justify-between pt-8 border-t border-dark-border">
+                <p class="text-gray-500">
+                    © 2024 NexusGuard. All rights reserved.
+                </p>
+                <div class="flex items-center gap-6 mt-4 md:mt-0 text-sm text-gray-400">
+                    <span>Built for Minecraft networks worldwide</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="script.js"></script>
+</body>
+</html>
