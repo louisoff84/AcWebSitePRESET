@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download - AC Template</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="download-container">
+    <img src="https://minecraft.craftpick.fr/storage/img/craftpick-png.png" class="logo" alt="Logo">
+
+    <h1>Download AC Website Template</h1>
+    <p>Your download will start automatically...</p>
+
+    <div class="loader"></div>
+
+    <p class="small">
+        If nothing happens,
+        <a id="manualDownload"
+           href="https://raw.githubusercontent.com/louisoff84/AcWebSitePRESET/main/ac.html"
+           download="AC.html">
+            click here
+        </a>.
+    </p>
+</div>
+
+<script>
+const file =
+"https://raw.githubusercontent.com/louisoff84/AcWebSitePRESET/main/ac.html";
+
+function downloadFile() {
+    fetch(file)
+        .then(res => res.blob())
+        .then(blob => {
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "AC.html";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+
+            URL.revokeObjectURL(url);
+        })
+        .catch(() => {
+            window.location.href = file;
+        });
+}
+
+window.onload = () => {
+    setTimeout(downloadFile, 500);
+};
+</script>
+
+</body>
+</html>
