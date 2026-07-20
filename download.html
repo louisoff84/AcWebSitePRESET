@@ -3,57 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Download - AC Template</title>
+    <title>Download - AC Website Template</title>
+
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        body{
+            margin:0;
+            font-family:Arial,Helvetica,sans-serif;
+            background:#0a0a0a;
+            color:#fff;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            height:100vh;
+        }
+
+        .box{
+            width:600px;
+            max-width:90%;
+            background:#111;
+            border:1px solid #1f1f1f;
+            border-radius:20px;
+            padding:50px;
+            text-align:center;
+            box-shadow:0 0 40px rgba(0,255,120,.15);
+        }
+
+        .box img{
+            width:110px;
+            margin-bottom:25px;
+        }
+
+        h1{
+            margin:0;
+            font-size:42px;
+        }
+
+        p{
+            color:#bdbdbd;
+            margin:20px 0 35px;
+            line-height:1.7;
+        }
+
+        .download-btn{
+            display:inline-block;
+            padding:16px 40px;
+            border-radius:12px;
+            background:#22c55e;
+            color:#000;
+            font-size:18px;
+            font-weight:bold;
+            text-decoration:none;
+            transition:.25s;
+        }
+
+        .download-btn:hover{
+            transform:translateY(-3px);
+            box-shadow:0 0 30px rgba(34,197,94,.45);
+        }
+
+        .back{
+            display:block;
+            margin-top:30px;
+            color:#888;
+            text-decoration:none;
+        }
+
+        .back:hover{
+            color:#22c55e;
+        }
+    </style>
 </head>
 <body>
 
-<div class="download-container">
-    <img src="https://minecraft.craftpick.fr/storage/img/craftpick-png.png" class="logo" alt="Logo">
+<div class="box">
 
-    <h1>Download AC Website Template</h1>
-    <p>Your download will start automatically...</p>
+    <img src="https://minecraft.craftpick.fr/storage/img/craftpick-png.png" alt="Logo">
 
-    <div class="loader"></div>
+    <h1>Download Template</h1>
 
-    <p class="small">
-        If nothing happens,
-        <a id="manualDownload"
-           href="https://raw.githubusercontent.com/louisoff84/AcWebSitePRESET/main/ac.html"
-           download="AC.html">
-            click here
-        </a>.
+    <p>
+        Download the complete AntiCheat website template.<br>
+        Click the button below to get <strong>AC.html</strong>.
     </p>
+
+    <a class="download-btn"
+       href="https://raw.githubusercontent.com/louisoff84/AcWebSitePRESET/main/ac.html"
+       download="AC.html">
+        ⬇ Download AC.html
+    </a>
+
+    <a href="index.html" class="back">
+        ← Back to Home
+    </a>
+
 </div>
-
-<script>
-const file =
-"https://raw.githubusercontent.com/louisoff84/AcWebSitePRESET/main/ac.html";
-
-function downloadFile() {
-    fetch(file)
-        .then(res => res.blob())
-        .then(blob => {
-            const url = URL.createObjectURL(blob);
-
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "AC.html";
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-
-            URL.revokeObjectURL(url);
-        })
-        .catch(() => {
-            window.location.href = file;
-        });
-}
-
-window.onload = () => {
-    setTimeout(downloadFile, 500);
-};
-</script>
 
 </body>
 </html>
